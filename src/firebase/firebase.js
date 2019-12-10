@@ -1,5 +1,6 @@
 import app from 'firebase/app';
-import auth from 'firebase/auth';
+import 'firebase/auth';
+import 'firebase/firestore'; 
 
 import firebaseConfig from './config';
 
@@ -10,6 +11,7 @@ class Firebase {
         // Initialize Firebase
         app.initializeApp(firebaseConfig);
         this.auth = app.auth();
+        this.database = app.firestore();
     }
 
     // Create User Method
@@ -32,6 +34,11 @@ class Firebase {
     // Logout User Method
     async logout() {
         await this.auth.signOut();
+    }
+
+    // Reset User Password Method
+    async resetPassword(email) {
+        await this.auth.sendPasswordResetEmail(email);
     }
 }
 

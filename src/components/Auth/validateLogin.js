@@ -9,7 +9,7 @@ export default function validateLogin(values) {
     } 
 
 
-    // Password Emails
+    // Password Errors
     if (!values.password) {
         errors.password = "Password required";
     } else if (values.password.length < 8) {

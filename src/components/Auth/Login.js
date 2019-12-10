@@ -9,6 +9,7 @@ import validateLogin from './validateLogin';
 // Import Custom Hook
 import useFormValidation from './useFormValidation';
 
+import { Link } from 'react-router-dom';
 function Login(props) {
 
   // Initial State
@@ -97,6 +98,9 @@ function Login(props) {
           </button>
         </div>
       </form>
+      <div className="forgot-password">
+        <Link to="forgot">Forgot password?</Link>
+      </div>
     </div>
   )
 }
