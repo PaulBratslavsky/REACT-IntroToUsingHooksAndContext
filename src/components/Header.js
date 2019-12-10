@@ -10,7 +10,7 @@ function Header() {
     <header className="header">
       <div className="flex">
         <img src="/logo.png" alt="Hooks News" className="logo"/>
-        <NavLink to="/" className="header-title">Hook News</NavLink>
+        <NavLink to="/" className="header-title">Web News</NavLink>
         <NavLink to="/" className="header-link">New</NavLink>
         <div className="divider">|</div>
         <NavLink to="/top" className="header-link">Top</NavLink>

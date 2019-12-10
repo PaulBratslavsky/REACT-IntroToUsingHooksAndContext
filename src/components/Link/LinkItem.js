@@ -5,7 +5,10 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { FirebaseContext } from "../../firebase";
 
 function LinkItem({link, count, showCount, history}) {
+  
   const { firebase, user } = React.useContext(FirebaseContext);
+
+  
 
   // Update Upvote via firebase
   function handleUpVote() {
@@ -35,8 +38,22 @@ function LinkItem({link, count, showCount, history}) {
             voteRef.update({ votes: updatedVotesArray })
           } 
         })
-        .catch();
+        .catch( error => console.error('Error updating votes: ',error) );
     }
+  }
+
+  // Check if link was created by current user before deleting
+  const postedByAuthedUser = user && user.uid === link.postedBy.id
+
+  function handleDeleteLink() {
+    // Get reference for item to Delete
+    const linkRef = firebase.database.collection('links').doc(link.id);
+    linkRef.delete()
+      .then(() => {
+        console.log(`Document with the id:${link.id} was deleted.`);
+      })
+      .catch( error => console.error('Error deleting document: ',error) );
+    console.log('delete link clicked');
   }
   return (
     <div className="flex items-start mt2">
@@ -56,6 +73,12 @@ function LinkItem({link, count, showCount, history}) {
               ? `${link.comments.length} comment(s)`
               :  'discuss'}
           </Link>
+          { postedByAuthedUser && (
+            <React.Fragment>
+              {" | "}
+              <span className="delete-button" onClick={handleDeleteLink}>Delete</span>
+            </React.Fragment>
+          )}
         </div>
       </div>
     </div>

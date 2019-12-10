@@ -8,6 +8,10 @@ function LinkList(props) {
   // STATE
   const [ links, setLinks ] = React.useState(null);
 
+  // Check Page
+  const isNewPage = props.location.pathname.includes("new");
+  console.log(isNewPage, "CHECK");
+
   // Use instead of component did mount
   React.useEffect( () => {
     getLinks();
@@ -15,7 +19,8 @@ function LinkList(props) {
 
   function getLinks() {
     // Get data from firebase onSnapshot sets up a listenet and will update on change
-    firebase.database.collection('links').onSnapshot(handleSnapshot);
+    // orderBy() - order by field selected
+    firebase.database.collection('links').orderBy('created', 'desc').onSnapshot(handleSnapshot);
   }
 
   function handleSnapshot(snapshot) {
@@ -29,6 +34,17 @@ function LinkList(props) {
     // console.log({links}, "DATA FROM FIRESTORE");
   }
 
+  function renderLinks() {
+    if (isNewPage) {
+      console.log('new page');
+      return links;
+    } else {
+      console.log('other page');
+      const topLinks = links.slice().sort((l1, l2) => l2.votes.length - l1.votes.length );
+      return topLinks;
+    }
+  }
+
   function displayLinks(links) {
     return links.map( (link, index) => (
       <LinkItem key={link.id} showCount={true} link={link} count={index + 1}/>
@@ -38,7 +54,7 @@ function LinkList(props) {
   return (
     <div>
       <h2>Links List</h2>
-      { links ? displayLinks(links) : <p>Loading...</p>}
+      { links ? displayLinks(renderLinks()) : <p>Loading...</p>}
     </div>
   )
 }
